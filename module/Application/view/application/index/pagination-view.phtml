@@ -1,0 +1,45 @@
+<?php
+/**
+ * You need to assign the ID of the first item on the page
+ * as 'currentId' to the list of parameters of pagintionControl() view helper
+ */
+
+?>
+<?php if($this->pageCount > 1) : ?>
+    <div>Page <?=$this->current .' of '. $this->pageCount?></div>
+    <ul>
+        <?if (isset($this->previous)):?>
+            <li class="prev">
+                <a href="<?= $this->url('mongo',array('page' => $this->previous, 'step' => -1, 'currentId' => $this->currentId)); ?>">← Previous</a>
+            </li>
+        <?else:?>
+            <li class="prev disabled">
+                <a href="#">← Previous</a>
+            </li>
+        <?endif;?>
+
+        <!-- Numbered page links -->
+        <?foreach ($this->pagesInRange as $page): ?>
+            <?if ($page != $this->current): ?>
+                <li>
+                    <a href="<?= $this->url('mongo',array('page' => $page, 'step' => $page - $this->current, 'currentId' => $this->currentId)); ?>"><?= $page; ?></a>
+                </li>
+            <?else: ?>
+                <li class="active">
+                    <a href="#"><?= $page; ?></a>
+                </li>
+            <?endif; ?>
+        <?endforeach; ?>
+
+        <!-- Next page link -->
+        <?if (isset($this->next)): ?>
+            <li class="next">
+                <a href="<?= $this->url('mongo',array('page' => $this->next, 'step' => 1, 'currentId' => $this->currentId)); ?>">Next → </a>
+            </li>
+        <?else: ?>
+            <li class="next disabled">
+                <a href="#">Next → </a>
+            </li>
+        <?endif; ?>
+    </ul>
+<?endif; ?>

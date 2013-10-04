@@ -10,6 +10,19 @@
 return array(
     'router' => array(
         'routes' => array(
+            'mongo' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'       => '/mongo[/:page][/:step][/:currentId]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' =>  'Application\Controller\Index',
+                        'action'     => 'index',
+                    ),
+                )
+            ),
             'home' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -39,12 +52,17 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
+                            'route'    => '/[:controller[/:action[/:page[/:step[/:currentId]]]]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'page'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'step'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'currentId'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
+                                'controller' => 'index',
+                                'action' => 'index',
                             ),
                         ),
                     ),
@@ -60,6 +78,11 @@ return array(
         'aliases' => array(
             'translator' => 'MvcTranslator',
         ),
+        'factories' => array(
+            'My\Mongo'           => 'PhlyMongo\MongoConnectionFactory',
+            'My\MongoDB'         => new \PhlyMongo\MongoDbFactory('test', 'My\Mongo'),
+            'My\MongoCollection' => new \PhlyMongo\MongoCollectionFactory('test', 'My\MongoDB'),
+        )
     ),
     'translator' => array(
         'locale' => 'en_US',
@@ -89,7 +112,8 @@ return array(
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),
         'template_path_stack' => array(
-            __DIR__ . '/../view',
+            'module' => __DIR__ . '/../view',
+            'partial' => __DIR__ . '/../view/application/index',
         ),
     ),
     // Placeholder for console routes
