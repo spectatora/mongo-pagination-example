@@ -16,6 +16,6 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.2.*",
-	"sasquatch-mc/better-mongo-pagination": "master"
+	"sasquatch-mc/better-mongo-pagination": "dev-master"
     }
 }
